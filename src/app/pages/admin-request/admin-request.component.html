@@ -1,0 +1,124 @@
+<app-admin-header></app-admin-header>
+<!-- <div class="container"> -->
+<div class="card">
+  <div class="card-header">
+    <h6 class="text-center text-light">Admin Request(s)</h6>
+  </div>
+  <div class="card-body bg-light">
+    <div class="card-header row bg-dark align-items-center">
+      <div class="col-lg-2 col-sm-12 col-md-4">
+        <label> Total Items: {{ count }}</label>
+      </div>
+      <div
+        class="col-lg-10 col-sm-12 col-md-4 d-flex justify-content-end align-items-center"
+      >
+        <pagination-controls
+          [responsive]="true"
+          class="my-1"
+          previousLabel="Prev"
+          nextLabel="Next"
+          (pageChange)="handlePageChange($event)"
+        ></pagination-controls>
+      </div>
+    </div>
+    <div class="row my-2">
+      <div
+        class="col-lg-3 col-sm-12 col-md-4"
+        *ngFor="
+          let item of adminRequestList
+            | paginate
+              : {
+                  itemsPerPage: pageSize,
+                  currentPage: page,
+                  totalItems: count
+                };
+          let i = index
+        "
+      >
+        <div class="card bg-light">
+          <div class="card-body text-dark">
+            <p class="card-text fw-bold">
+              {{ (page - 1) * pageSize + i + 1 }}.
+
+              {{ item.email }}
+            </p>
+            <small
+              *ngIf="item.reason.length > 26"
+              class="card-text fw-bold"
+              [title]="item.reason"
+              >Reason - {{ item.reason | slice : 0 : 25 }}...</small
+            >
+            <small
+              *ngIf="item.reason.length < 26"
+              class="card-text fw-bold"
+              [title]="item.reason"
+            >
+              Reason - {{ item.reason }}
+            </small>
+            <div>
+              <small
+                ><span class="badge bg-info text-dark"
+                  ><i class="bi bi-alarm-fill"></i>
+                  {{ item.reqRaisedOn.split("T")[0] }}</span
+                >
+              </small>
+              <small
+                ><span class="badge bg-warning text-dark mx-3"
+                  ><i class="bi bi-people"></i> {{ item.team }}</span
+                >
+              </small>
+            </div>
+            <div class="form-check form-check-inline my-2">
+              <input
+                class="form-check-input"
+                type="radio"
+                [name]="item.email"
+                [value]="item.approve"
+                [checked]="item.approve"
+                (change)="onchangeApproveOrDecline(item, 'approve')"
+              />
+              <label class="form-check-label" for="inlineRadio1">Approve</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input
+                class="form-check-input"
+                type="radio"
+                [name]="item.email"
+                [value]="item.approve"
+                [checked]="!item.approve"
+                (change)="onchangeApproveOrDecline(item, 'decline')"
+              />
+              <label class="form-check-label" for="inlineRadio2">Decline</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-header row bg-dark align-items-center">
+      <div class="col-lg-2 col-sm-12 col-md-4">
+        <label> Items per Page:</label>
+        <select
+          (change)="handlePageSizeChange($event)"
+          class="form-select form-select-sm"
+        >
+          <option *ngFor="let size of pageSizes" [ngValue]="size">
+            {{ size }}
+          </option>
+        </select>
+      </div>
+      <div
+        class="col-lg-10 col-sm-12 col-md-4 d-flex justify-content-end align-items-center"
+      >
+        <pagination-controls
+          [responsive]="true"
+          class="my-1"
+          previousLabel="Prev"
+          nextLabel="Next"
+          (pageChange)="handlePageChange($event)"
+        ></pagination-controls>
+      </div>
+    </div>
+  </div>
+  <div class="card-footer"></div>
+</div>
+<!-- </div> -->
